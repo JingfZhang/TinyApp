@@ -1,0 +1,19 @@
+{
+  "name": "tinyapp",
+  "version": "1.0.0",
+  "description": "An HTTP Server that handles requests from the browser (client)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JingfZhang/TinyApp.git"
+  },
+  "author": "Jingfan Zhang",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JingfZhang/TinyApp/issues"
+  },
+  "homepage": "https://github.com/JingfZhang/TinyApp#readme"
+}
