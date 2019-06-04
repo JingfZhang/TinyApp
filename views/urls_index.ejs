@@ -10,11 +10,13 @@
   <title>TinyApp</title>
 </head>
 <body style="font-size:20px; padding:50px;">
-    <h1>
-      <% let urlArray = Object.values(urls) %>
-      <% urlArray.forEach(function(url) { %>
-        <li><%= url %></li>
-      <% }); %>
-    </h1>
+  <% include partials/_header.ejs %>
+  <h2>
+    My URLs
+  </h2>
+  <% let urlArray = Object.values(urls) %>
+  <% urlArray.forEach(function(url) { %>
+    <li><%= url %></li>
+    <% }); %>
 </body>
 </html>
