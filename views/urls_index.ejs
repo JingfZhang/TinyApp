@@ -11,12 +11,16 @@
 </head>
 <body style="font-size:20px; padding:50px;">
   <% include partials/_header.ejs %>
+
   <h2>
     My URLs
   </h2>
-  <% let urlArray = Object.values(urls) %>
-  <% urlArray.forEach(function(url) { %>
-    <li><%= url %></li>
-    <% }); %>
+
+    <% for (let url in urls) { %>
+      <form method="POST" action="/urls/<%=url%>/delete">
+        <%= url%> -----> <a href=<%=urls[url]%>><%= urls[url] %></a>
+        <button type="submit" class="btn btn-primary">Delete</button>
+      </form>
+    <% } %>
 </body>
 </html>
