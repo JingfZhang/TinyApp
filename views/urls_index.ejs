@@ -17,10 +17,12 @@
   </h2>
 
     <% for (let url in urls) { %>
-      <form method="POST" action="/urls/<%=url%>/delete">
-        <%= url%> -----> <a href=<%=urls[url]%>><%= urls[url] %></a>
-        <button type="submit" class="btn btn-primary">Delete</button>
-      </form>
+
+    <%= url%> -----> <a href=<%=urls[url]%>><%= urls[url] %></a>
+    <a href="http://localhost:8080/urls/<%=url%>">Edit</a>
+    <form method="POST" action="/urls/<%=url%>/delete">
+      <button type="submit" class="btn btn-primary">Delete</button>
+    </form>
     <% } %>
 </body>
 </html>

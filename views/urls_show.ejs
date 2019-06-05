@@ -15,5 +15,8 @@
   TinyURL for
 </h2>
 <%= shortURL %> ----> <%= longURL %>
+<form method="POST" action="/urls/<%= shortURL%>/update">
+  <input class="form-controls" type="text" name="newURL" placeholder="<%= longURL %>" style="width: 300px; margin: 1em">
+  <button type="submit" class="btn btn-primary">Update</button>
 </body>
 </html>
