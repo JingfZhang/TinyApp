@@ -10,7 +10,7 @@
   <title>TinyApp</title>
 </head>
 <body style="font-size:20px; padding:50px;">
-  <% include partials/_header.ejs %>
+  <%- include('partials/_header.ejs', { username: username }) %>
 
   <h2>
     My URLs
