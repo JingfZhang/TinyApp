@@ -15,14 +15,16 @@
   <h2>
     My URLs
   </h2>
-
-    <% for (let url in urls) { %>
-
-    <%= url%> -----> <a href= <%=urls[url]%>><%= urls[url] %></a>
-    <a href="http://localhost:8080/urls/<%=url%>">Edit</a>
-    <form method="POST" action="/urls/<%=url%>/delete">
-      <button type="submit" class="btn btn-primary">Delete</button>
-    </form>
+    <% if (userId) { %>
+      <% for (let url of shortURLs) { %>
+          URL: <a href= <%=urls[url]["longURL"]%>><%= url%></a>
+          <a href="http://localhost:8080/urls/<%=url%>">Edit</a>
+          <form method="POST" action="/urls/<%=url%>/delete">
+            <button type="submit" class="btn btn-primary">Delete</button>
+          </form>
+      <% } %>
+    <% } else { %>
+      You are not logged in!
     <% } %>
 </body>
 </html>

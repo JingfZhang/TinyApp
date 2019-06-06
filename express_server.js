@@ -24,14 +24,25 @@ function isRegistered(email) {
   return false;
 }
 
+function urlsForUser(id) {
+  let urls =[];
+  for (shortURL in urlDatabase) {
+    if (urlDatabase[shortURL]["userID"] === id) {
+      urls.push(shortURL);
+    }
+  }
+
+  return urls;
+}
+
 const urlDatabase = {
-  "b2xVn2": "http://www.lighthouselabs.ca",
-  "9sm5xK": "http://www.google.com"
+  "b2xVn2": {longURL: "http://www.lighthouselabs.ca", userID: "aJ48lW"},
+  "9sm5xK": {longURL: "http://www.google.com", userID: "aJ48lW"}
 };
 
 const users = {
-  "userRandomID": {
-    id: "userRandomID",
+  "aJ48lW": {
+    id: "aJ48lW",
     email: "user@example.com",
     password: "purple-monkey-dinosaur"
   },
@@ -55,37 +66,46 @@ app.get("/hello", (req, res) => {
 });
 
 app.get("/urls", (req, res) => {
-  let templetVars = { urls: urlDatabase, user: users[req.cookies["user_id"]]};
+  let templetVars = { urls: urlDatabase, userId: req.cookies["user_id"], shortURLs: urlsForUser(req.cookies["user_id"]), user: users[req.cookies["user_id"]]};
   res.render("urls_index", templetVars);
 });
 
 app.get("/urls/new", (req, res) => {
-  let templetVars = {user: users[req.cookies["user_id"]]};
-  res.render("urls_new", templetVars);
+  if (req.cookies["user_id"]) {
+    let templetVars = {user: users[req.cookies["user_id"]]};
+    res.render("urls_new", templetVars);
+  } else {
+    res.redirect("/login");
+  }
 });
 
 app.get("/urls/:shortURL", (req, res) => {
-  let templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL], user: users[req.cookies["user_id"]] };
+  let templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL]["longURL"], user: users[req.cookies["user_id"]] };
   res.render("urls_show", templateVars);
 });
 
 app.post("/urls", (req, res) => {
-  urlDatabase[generateRandomString()] = req.body.longURL;
+  let newId = generateRandomString()
+  urlDatabase[newId] = {longURL: req.body.longURL, userID: req.cookies["user_id"]};
   res.redirect("/urls");
 });
 
 app.get("/u/:shortURL", (req, res) => {
-  const longURL = urlDatabase[req.params.shortURL];
+  const longURL = urlDatabase[req.params.shortURL]["longURL"];
   res.redirect(longURL);
 });
 
 app.post("/urls/:shortURL/delete", (req,res) => {
-  delete urlDatabase[req.params.shortURL];
+  if (req.cookies["user_id"] === urlDatabase[req.params.shortURL]["userID"]) {
+    delete urlDatabase[req.params.shortURL];
+  }
   res.redirect("/urls");
 });
 
 app.post("/urls/:shortURL/update", (req,res) => {
-  urlDatabase[req.params.shortURL] = req.body.newURL;
+  if (req.cookies["user_id"] === urlDatabase[req.params.shortURL]["userID"]) {
+    urlDatabase[req.params.shortURL] = req.body.newURL;
+  }
   res.redirect("/urls");
 });
 
@@ -124,8 +144,7 @@ app.post("/register", (req, res) => {
   if(!req.body.email || !req.body.password) {
     res.statusCode = 400;
     res.send("Enter info");
-  }
-   else if (isRegistered(req.body.email)) {
+  } else if (isRegistered(req.body.email)) {
     res.statusCode = 400;
     res.send("Already registered");
   } else {
@@ -139,6 +158,7 @@ app.post("/register", (req, res) => {
     res.redirect("/urls");
   }
 });
+
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
